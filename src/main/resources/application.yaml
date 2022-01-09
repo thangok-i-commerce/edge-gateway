@@ -1,16 +1,33 @@
 server:
-  port : 8080
+  port: 8080
 
 spring:
   config:
     import: "optional:configserver:"
   cloud:
     gateway:
+      discovery:
+        locator:
+          enabled: true
       routes:
-        - id: thangok_route
-          uri: http://localhost
+        - id: brandModule
+          uri: http://localhost:8081/
           predicates:
-            - Path=/api/
+            - Path=/brand/**
+        - id: productModule
+          uri: http://localhost:8082/
+          predicates:
+            - Path=/product/**
+        - id: orderModule
+          uri: http://localhost:8083/
+          predicates:
+            - Path=/order/**
+        - id: openapi
+          uri: http://localhost:${server.port}
+          predicates:
+            - Path=/v3/api-docs/**
+          filters:
+            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
 management:
   endpoints:
     web:
