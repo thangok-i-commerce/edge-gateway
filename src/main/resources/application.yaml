@@ -1,0 +1,18 @@
+server:
+  port : 8080
+
+spring:
+  config:
+    import: "optional:configserver:"
+  cloud:
+    gateway:
+      routes:
+        - id: thangok_route
+          uri: http://localhost
+          predicates:
+            - Path=/api/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
